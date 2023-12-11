@@ -20,9 +20,11 @@ function Upload({ addImage, productImageUploadUrl }) {
     for (let i = 0; i < e.target.files.length; i += 1) {
       formData.append('images', e.target.files[i]);
     }
-    const targetPath = `catalog/${
-      Math.floor(Math.random() * (9999 - 1000)) + 1000
-    }/${Math.floor(Math.random() * (9999 - 1000)) + 1000}`;
+    function getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    const targetPath = `catalog/${getRandomNumber(1000, 9999)}/${getRandomNumber(1000, 9999)}`;
     formData.append('targetPath', targetPath);
     fetch(productImageUploadUrl + targetPath, {
       method: 'POST',
