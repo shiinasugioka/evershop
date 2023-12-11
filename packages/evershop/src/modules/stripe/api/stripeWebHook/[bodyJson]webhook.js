@@ -13,6 +13,7 @@ const {
 const { getConfig } = require('@evershop/evershop/src/lib/util/getConfig');
 const { emit } = require('@evershop/evershop/src/lib/event/emitter');
 const { debug } = require('@evershop/evershop/src/lib/log/debuger');
+const { display } = require('zero-decimal-currencies');
 const { getSetting } = require('../../../setting/services/setting');
 
 // eslint-disable-next-line no-unused-vars
@@ -56,7 +57,7 @@ module.exports = async (request, response, delegate, next) => {
         // Create payment transaction
         await insert('payment_transaction')
           .given({
-            amount: paymentIntent.amount,
+            amount: parseFloat(display(paymentIntent.amount, paymentIntent.currency)),
             payment_transaction_order_id: order.order_id,
             transaction_id: paymentIntent.id,
             transaction_type: 'online',
