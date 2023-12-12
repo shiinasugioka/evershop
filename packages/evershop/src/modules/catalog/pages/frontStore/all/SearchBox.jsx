@@ -42,7 +42,7 @@ export default function SearchBox({ searchPageUrl }) {
   };
 
   return (
-    <div className="search-box">
+    <div className="search-box"
       <a href="#" className="search-icon" onClick={handleOnSearchIconClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
