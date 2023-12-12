@@ -16,17 +16,34 @@ export default function SearchBox({ searchPageUrl }) {
     setKeyword(key);
   }, []);
 
+  const handleOnSearchIconClick = (e) => {
+    e.preventDefault();
+    setShowing(!showing);
+    InputRef.current.focus();
+  };
+
+  const handleOnCloseIconClick = (e) => {
+    e.preventDefault();
+    setShowing(false);
+  };
+
+  const handleOnSearchInputChanged = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleOnSearchInputKeyPressed = (e) => {
+    if (e.key === 'Enter') {
+      // Redirect to search page with search query as the keyword in the url
+      const url = new URL(searchPageUrl, window.location.origin);
+      url.searchParams.set('keyword', InputRef.current.value);
+
+      window.location.href = url;
+    }
+  };
+
   return (
     <div className="search-box">
-      <a
-        href="#"
-        className="search-icon"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowing(!showing);
-          InputRef.current.focus();
-        }}
-      >
+      <a href="#" className="search-icon" onClick={handleOnSearchIconClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           style={{ width: '2.2rem', height: '2.2rem' }}
@@ -45,14 +62,7 @@ export default function SearchBox({ searchPageUrl }) {
       {showing && (
         <div className="search-input-container">
           <div className="search-input">
-            <a
-              href="#"
-              className="close-icon"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowing(false);
-              }}
-            >
+            <a href="#" className="close-icon" onClick={handleOnCloseIconClick}>
               <XIcon width="2rem" height="2rem" />
             </a>
             <Input
@@ -75,18 +85,8 @@ export default function SearchBox({ searchPageUrl }) {
               placeholder="Search"
               ref={InputRef}
               value={keyword}
-              onChange={(e) => {
-                setKeyword(e.target.value);
-              }}
-              onKeyPress={(event) => {
-                if (event.key === 'Enter') {
-                  // Redirect to search page with search query as the keyword in the url
-                  const url = new URL(searchPageUrl, window.location.origin);
-                  url.searchParams.set('keyword', InputRef.current.value);
-
-                  window.location.href = url;
-                }
-              }}
+              onChange={handleOnSearchInputChanged}
+              onKeyPress={handleOnSearchInputKeyPressed}
             />
           </div>
         </div>
