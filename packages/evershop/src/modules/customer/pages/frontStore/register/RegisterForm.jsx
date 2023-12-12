@@ -11,6 +11,31 @@ export default function RegisterForm({ action, homeUrl, loginApi, loginUrl }) {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
 
+  const login = async (response) => {
+    if (!response.error) {
+      // Log the customer in
+      const loginResponse = await fetch(loginApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+      const loginResponseJson = await loginResponse.json();
+      if (loginResponseJson.error) {
+        setError(loginResponseJson.error.message);
+      } else {
+        window.location.href = homeUrl;
+      }
+    } else {
+      setError(response.error.message);
+    }
+  }
+``
   return (
     <div className="flex justify-center items-center">
       <div className="register-form flex justify-center items-center">
@@ -22,30 +47,7 @@ export default function RegisterForm({ action, homeUrl, loginApi, loginUrl }) {
             action={action}
             isJSON
             method="POST"
-            onSuccess={async (response) => {
-              if (!response.error) {
-                // Log the customer in
-                const loginResponse = await fetch(loginApi, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    email,
-                    password
-                  })
-                });
-
-                const loginResponseJson = await loginResponse.json();
-                if (loginResponseJson.error) {
-                  setError(loginResponseJson.error.message);
-                } else {
-                  window.location.href = homeUrl;
-                }
-              } else {
-                setError(response.error.message);
-              }
-            }}
+            onSuccess={login}
             btnText={_('SIGN UP')}
           >
             <Area
