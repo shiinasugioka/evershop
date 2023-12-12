@@ -99,6 +99,9 @@ export function PriceFilter({
     return () => clearTimeout(timeoutID);
   }, [from, to]);
 
+  const formatCurrency = (value) =>
+    new Intl.NumberFormat(language, { style: 'currency', currency }).format(value);
+
   const onChange = (e, direction) => {
     e.persist();
     firstRender.current = false;
@@ -119,15 +122,6 @@ export function PriceFilter({
       }
     }
   };
-
-  const f = new Intl.NumberFormat(language, {
-    style: 'currency',
-    currency
-  }).format(from);
-  const t = new Intl.NumberFormat(language, {
-    style: 'currency',
-    currency
-  }).format(to);
 
   return (
     <div className="price-filter">
@@ -151,7 +145,7 @@ export function PriceFilter({
               }% + 3px)`
             }}
           />
-          <output>{f}</output>
+          <output>{formatCurrency(from)}</output>
         </div>
         <input
           className="max"
@@ -171,7 +165,7 @@ export function PriceFilter({
               }% - 6px)`
             }}
           />
-          <output>{t}</output>
+          <output>{formatCurrency(to)}</output>
         </div>
       </div>
     </div>
